@@ -19,6 +19,7 @@ intents = discord.Intents.all()
 bot = commands.Bot(command_prefix="!", intents=intents)
 LOG = logging.getLogger(__name__)
 
+
 # Basic Bot Events
 
 @bot.event
@@ -73,17 +74,17 @@ async def leave(ctx: Context):
 
 @bot.command(name='play_song', help='Play a song')
 async def play(ctx: Context, url: str):
-    # try:
-    server = ctx.message.guild
-    voice_channel = server.voice_client
+    try:
+        server = ctx.message.guild
+        voice_channel = server.voice_client
 
-    async with ctx.typing():
-        filename = await YTDLSource.from_url(url, loop=bot.loop)
-        voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg\\bin\\ffmpeg.exe", source=filename))
-    await ctx.send(f'**Now Playing:** {filename}')
-    # except Exception as e:
-    #     LOG.error(f"Following error occurred : {e}")
-    #     await ctx.send("The bot is not connect to a voice channel")
+        async with ctx.typing():
+            filename = await YTDLSource.from_url(url, loop=bot.loop)
+            voice_channel.play(discord.FFmpegPCMAudio(executable="ffmpeg\\bin\\ffmpeg.exe", source=filename))
+        await ctx.send(f'**Now Playing:** {filename}')
+    except Exception as e:
+        LOG.error(f"Following error occurred : {e}")
+        await ctx.send("The bot is not connect to a voice channel")
 
 
 @bot.command(name='pause', help='This command pauses the song')
